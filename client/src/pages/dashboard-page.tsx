@@ -34,9 +34,9 @@ export default function DashboardPage() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <StatCard icon={TrendingUp} label="Rapid" value={p?.rapid_rating ?? 'N/A'} />
-        <StatCard icon={Clock} label="Blitz" value={p?.blitz_rating ?? 'N/A'} />
-        <StatCard icon={Swords} label="Bullet" value={p?.bullet_rating ?? 'N/A'} />
+        <StatCard icon={TrendingUp} label="Rapid" value={p?.ratings?.rapid ?? 'N/A'} />
+        <StatCard icon={Clock} label="Blitz" value={p?.ratings?.blitz ?? 'N/A'} />
+        <StatCard icon={Swords} label="Bullet" value={p?.ratings?.bullet ?? 'N/A'} />
       </div>
 
       <div className="rounded-lg border bg-card p-6">

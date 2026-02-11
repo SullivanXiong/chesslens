@@ -7,7 +7,7 @@ It handles fetching player profiles, statistics, and game archives.
 
 import httpx
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import datetime, timezone
 
 
 @dataclass
@@ -93,7 +93,7 @@ class ChessComClient:
             url=data.get("url", ""),
             avatar_url=data.get("avatar"),
             country=data.get("country", "").split("/")[-1] if data.get("country") else None,
-            joined=datetime.fromtimestamp(data["joined"]) if data.get("joined") else None,
+            joined=datetime.fromtimestamp(data["joined"], tz=timezone.utc) if data.get("joined") else None,
         )
 
     async def get_stats(self, username: str) -> ChessComStats:

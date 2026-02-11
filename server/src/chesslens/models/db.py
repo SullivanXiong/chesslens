@@ -17,7 +17,6 @@ from sqlalchemy import (
     Integer,
     String,
     Text,
-    UniqueConstraint,
 )
 from sqlalchemy.dialects.postgresql import ARRAY, JSONB
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
@@ -41,11 +40,11 @@ class Player(Base):
     chess_com_url: Mapped[Optional[str]] = mapped_column(String(200))
     avatar_url: Mapped[Optional[str]] = mapped_column(String(500))
     country: Mapped[Optional[str]] = mapped_column(String(10))
-    joined_at: Mapped[Optional[datetime]] = mapped_column(DateTime)
+    joined_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True))
     rapid_rating: Mapped[Optional[int]] = mapped_column(Integer)
     blitz_rating: Mapped[Optional[int]] = mapped_column(Integer)
     bullet_rating: Mapped[Optional[int]] = mapped_column(Integer)
-    last_synced_at: Mapped[Optional[datetime]] = mapped_column(DateTime)
+    last_synced_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True))
     total_games_fetched: Mapped[int] = mapped_column(Integer, default=0)
 
     # Relationships
@@ -76,10 +75,10 @@ class Game(Base):
     opening_name: Mapped[Optional[str]] = mapped_column(String(200))
     time_control: Mapped[Optional[str]] = mapped_column(String(20))
     time_class: Mapped[Optional[str]] = mapped_column(String(20))
-    played_at: Mapped[datetime] = mapped_column(DateTime, nullable=False)
+    played_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
     total_moves: Mapped[int] = mapped_column(Integer, nullable=False)
     is_analyzed: Mapped[bool] = mapped_column(Boolean, default=False, index=True, nullable=False)
-    analyzed_at: Mapped[Optional[datetime]] = mapped_column(DateTime)
+    analyzed_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True))
 
     # Relationships
     player: Mapped["Player"] = relationship("Player", back_populates="games")
@@ -160,7 +159,7 @@ class PlayerAnalysis(Base):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     player_id: Mapped[int] = mapped_column(Integer, ForeignKey("players.id"), unique=True, nullable=False)
     analyzed_game_count: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
-    last_computed_at: Mapped[Optional[datetime]] = mapped_column(DateTime)
+    last_computed_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True))
     primary_archetype: Mapped[Optional[str]] = mapped_column(String(50))
     secondary_archetype: Mapped[Optional[str]] = mapped_column(String(50))
     archetype_scores: Mapped[Optional[dict]] = mapped_column(JSONB)
@@ -171,7 +170,7 @@ class PlayerAnalysis(Base):
     rushing_score: Mapped[Optional[float]] = mapped_column(Float)
     weakest_phase: Mapped[Optional[str]] = mapped_column(String(20))
     coaching_summary: Mapped[Optional[str]] = mapped_column(Text)
-    coaching_generated_at: Mapped[Optional[datetime]] = mapped_column(DateTime)
+    coaching_generated_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True))
 
     # Relationships
     player: Mapped["Player"] = relationship("Player", back_populates="player_analysis")
@@ -189,7 +188,7 @@ class ChatMessage(Base):
     content: Mapped[str] = mapped_column(Text, nullable=False)
     context_game_id: Mapped[Optional[int]] = mapped_column(Integer, ForeignKey("games.id"))
     context_move_index: Mapped[Optional[int]] = mapped_column(Integer)
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, nullable=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
 
     # Relationships
     player: Mapped["Player"] = relationship("Player", back_populates="chat_messages")

@@ -1,8 +1,8 @@
 """initial schema
 
-Revision ID: 747535e6e5bd
+Revision ID: 8c021f58f2b0
 Revises: 
-Create Date: 2026-02-11 12:38:08.736211
+Create Date: 2026-02-11 13:23:17.550182
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
-revision: str = '747535e6e5bd'
+revision: str = '8c021f58f2b0'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -26,11 +26,11 @@ def upgrade() -> None:
     sa.Column('chess_com_url', sa.String(length=200), nullable=True),
     sa.Column('avatar_url', sa.String(length=500), nullable=True),
     sa.Column('country', sa.String(length=10), nullable=True),
-    sa.Column('joined_at', sa.DateTime(), nullable=True),
+    sa.Column('joined_at', sa.DateTime(timezone=True), nullable=True),
     sa.Column('rapid_rating', sa.Integer(), nullable=True),
     sa.Column('blitz_rating', sa.Integer(), nullable=True),
     sa.Column('bullet_rating', sa.Integer(), nullable=True),
-    sa.Column('last_synced_at', sa.DateTime(), nullable=True),
+    sa.Column('last_synced_at', sa.DateTime(timezone=True), nullable=True),
     sa.Column('total_games_fetched', sa.Integer(), nullable=False),
     sa.PrimaryKeyConstraint('id')
     )
@@ -51,10 +51,10 @@ def upgrade() -> None:
     sa.Column('opening_name', sa.String(length=200), nullable=True),
     sa.Column('time_control', sa.String(length=20), nullable=True),
     sa.Column('time_class', sa.String(length=20), nullable=True),
-    sa.Column('played_at', sa.DateTime(), nullable=False),
+    sa.Column('played_at', sa.DateTime(timezone=True), nullable=False),
     sa.Column('total_moves', sa.Integer(), nullable=False),
     sa.Column('is_analyzed', sa.Boolean(), nullable=False),
-    sa.Column('analyzed_at', sa.DateTime(), nullable=True),
+    sa.Column('analyzed_at', sa.DateTime(timezone=True), nullable=True),
     sa.ForeignKeyConstraint(['player_id'], ['players.id'], ),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('chess_com_game_url')
@@ -66,7 +66,7 @@ def upgrade() -> None:
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('player_id', sa.Integer(), nullable=False),
     sa.Column('analyzed_game_count', sa.Integer(), nullable=False),
-    sa.Column('last_computed_at', sa.DateTime(), nullable=True),
+    sa.Column('last_computed_at', sa.DateTime(timezone=True), nullable=True),
     sa.Column('primary_archetype', sa.String(length=50), nullable=True),
     sa.Column('secondary_archetype', sa.String(length=50), nullable=True),
     sa.Column('archetype_scores', postgresql.JSONB(astext_type=sa.Text()), nullable=True),
@@ -77,7 +77,7 @@ def upgrade() -> None:
     sa.Column('rushing_score', sa.Float(), nullable=True),
     sa.Column('weakest_phase', sa.String(length=20), nullable=True),
     sa.Column('coaching_summary', sa.Text(), nullable=True),
-    sa.Column('coaching_generated_at', sa.DateTime(), nullable=True),
+    sa.Column('coaching_generated_at', sa.DateTime(timezone=True), nullable=True),
     sa.ForeignKeyConstraint(['player_id'], ['players.id'], ),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('player_id')
@@ -109,7 +109,7 @@ def upgrade() -> None:
     sa.Column('content', sa.Text(), nullable=False),
     sa.Column('context_game_id', sa.Integer(), nullable=True),
     sa.Column('context_move_index', sa.Integer(), nullable=True),
-    sa.Column('created_at', sa.DateTime(), nullable=False),
+    sa.Column('created_at', sa.DateTime(timezone=True), nullable=False),
     sa.ForeignKeyConstraint(['context_game_id'], ['games.id'], ),
     sa.ForeignKeyConstraint(['player_id'], ['players.id'], ),
     sa.PrimaryKeyConstraint('id')
