@@ -49,7 +49,7 @@ export default function OpeningsPage() {
                     <td className="px-4 py-2 text-right">{o.games_played}</td>
                     <td className="px-4 py-2 text-right">{(o.win_rate * 100).toFixed(0)}%</td>
                     <td className="px-4 py-2 text-right">{o.wins}/{o.draws}/{o.losses}</td>
-                    <td className="px-4 py-2 text-right">Move {o.avg_deviation_move.toFixed(1)}</td>
+                    <td className="px-4 py-2 text-right">{o.avg_deviation_move != null ? `Move ${o.avg_deviation_move.toFixed(1)}` : '—'}</td>
                   </tr>
                 ))}
               </tbody>
